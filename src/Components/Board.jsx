@@ -4,43 +4,52 @@ import "./../Styles/Board.css";
 
 const API_URL = "https://random-word-api.vercel.app/api?words=1&length=5";
 const WORD_LENGTH = 5;
+const CHANCES = 6;
 
 export const Board = () => {
+	const [isGameOver, setIsGameOver] = useState(false);
 	const [solution, setSolution] = useState("");
-	const [guessList, setGuessList] = useState(Array(6).fill("     "));
+	const [guessList, setGuessList] = useState(Array(CHANCES).fill("     "));
 	const [currWord, setCurrWord] = useState("");
 	const [guessNumber, setGuessNumber] = useState(0);
 
 	const handleKeyDown = (event) => {
-		if (event.key == "Enter") {
-			if (currWord.length == WORD_LENGTH) {
-				setGuessNumber((prev) => prev + 1);
-				setCurrWord(() => "");
-			}
-			return;
-		} else if (event.key == "Backspace") {
-			setCurrWord((prev) => {
-				var newWord = prev.slice(0, -1);
-				setGuessList((prev) => {
-					let newGuess = [...prev]; // Copy the outer array
-					newGuess[guessNumber] = newWord.padEnd(5, " "); // Replace the entire string
-					return newGuess;
-				});
-				return newWord;
-			});
-		} else if (currWord.length < WORD_LENGTH) {
-			setCurrWord((prev) => {
-				var newWord = prev + event.key;
-				setGuessList((prev) => {
-					let newGuess = [...prev]; // Copy the outer array
-					newGuess[guessNumber] = newWord.padEnd(5, " "); // Replace the entire string
-					return newGuess;
-				});
-				return newWord;
-			});
-		}
+		if (isGameOver == false) {
+			if (event.key == "Enter") {
+				if (currWord.length == WORD_LENGTH) {
+					setGuessNumber((prev) => {
+						let curGuessNumber = prev + 1;
+						if (curGuessNumber == CHANCES || currWord == solution) {
+							setIsGameOver((prevVal) => !prevVal);
+						}
+						return curGuessNumber;
+					});
 
-		console.log(event.key);
+					setCurrWord(() => "");
+				}
+				return;
+			} else if (event.key == "Backspace") {
+				setCurrWord((prev) => {
+					var newWord = prev.slice(0, -1);
+					setGuessList((prev) => {
+						let newGuess = [...prev]; // Copy the outer array
+						newGuess[guessNumber] = newWord.padEnd(5, " "); // Replace the entire string
+						return newGuess;
+					});
+					return newWord;
+				});
+			} else if (currWord.length < WORD_LENGTH) {
+				setCurrWord((prev) => {
+					var newWord = prev + event.key;
+					setGuessList((prev) => {
+						let newGuess = [...prev]; // Copy the outer array
+						newGuess[guessNumber] = newWord.padEnd(5, " "); // Replace the entire string
+						return newGuess;
+					});
+					return newWord;
+				});
+			}
+		}
 	};
 
 	useEffect(() => {
@@ -66,7 +75,6 @@ export const Board = () => {
 				let isCurGuess = i == guessNumber;
 				return <Row word={guess} solution={solution} isCurGuess={isCurGuess} />;
 			})}
-			{currWord}
 		</div>
 	);
 };

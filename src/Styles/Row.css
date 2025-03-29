@@ -9,6 +9,7 @@
     justify-content: center;
     text-align: center;
     font-size: 25px;
+    border-radius: 4px;
 }
 .true{
     background-color: lightgreen;
