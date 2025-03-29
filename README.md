@@ -10,6 +10,8 @@ guess a randomly generated word within a limited number of attempts.
 - Tracks the number of guesses
 - Highlights correct and incorrect letters
 
+![Preview](preview.png)
+
 ## API Usage
 
 This project uses the **Random Word API** to fetch words for the game.

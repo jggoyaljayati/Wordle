@@ -70,7 +70,6 @@ export const Board = () => {
 
 	return (
 		<div className="board">
-			{solution}
 			{guessList.map((guess, i) => {
 				let isCurGuess = i == guessNumber;
 				return <Row word={guess} solution={solution} isCurGuess={isCurGuess} />;
